@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 @Entity("account")
 export class AccountEntity {
   @PrimaryGeneratedColumn("uuid")
-      id: number
+      id: string
 
   @Column({ name: "address", type: "varchar", length: 100 })
       address: string

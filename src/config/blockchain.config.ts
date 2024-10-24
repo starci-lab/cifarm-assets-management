@@ -38,3 +38,8 @@ export const blockchainConfig = (): BlockchainConfig => ({
         name: "Polkadot",
     },
 })
+
+export enum Network {
+    Testnet = "testnet",
+    Mainnet = "mainnet",
+}
