@@ -39,7 +39,7 @@ export class PolkadotMenuService {
             list = [
                 "0. Create a new account",
                 "1. View active account",
-                "2. View balances (Relay chain, Bifröst, Unique Network)",
+                "2. View balance (Relay chain)",
                 "3. Manage token (Bifrost)",
                 "4. Manage nfts (Unique Network)",
             ]
@@ -73,16 +73,10 @@ ${list.join("\n")}
                     break
                 }
                 case 2: {
-                    const [ relayChainBalance, uniqueNetworkBalance ] = await Promise.all([
-                        this.relayChainService.getBalance(),
-                        this.uniqueNetworkService.getBalance()
-                    ])
+                    const relayChainBalance = await this.relayChainService.getBalance()
                     const network = await this.networkService.getNetwork()
                     console.log(`Network: ${network === Network.Testnet ? "Testnet" : "Mainnet"}`)
-                    console.table({
-                        "Relay Chain": relayChainBalance,
-                        "Unique Network": uniqueNetworkBalance
-                    })
+                    console.log(`Relay Chain Balance: ${relayChainBalance}`)
                     this.continue()
                     break
                 }
