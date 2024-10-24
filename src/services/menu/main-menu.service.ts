@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common"
-import { blockchainConfig, SupportedChainKey } from "src/config"
-import { valuesWithKey } from "src/utils"
+import { blockchainConfig, SupportedChainKey } from "@/config"
+import { valuesWithKey } from "@/utils"
 import { PolkadotMenuService } from "./polkadot-menu.service"
 import { ReadlineService } from "./readline.service"
 
@@ -23,8 +23,7 @@ export class MainMenuService {
         })
         
         if (!hide) {
-            console.log(`
-Welcome to CiFarm CLI 🌾. Which blockchain do you want to interact with?
+            console.log(`Welcome to CiFarm CLI 🌾. Which blockchain do you want to interact with?
 ${list}`)
         }
         
@@ -35,6 +34,7 @@ ${list}`)
                 this.logger.verbose(`You selected: ${selectedBlockchain.name}`)
                 switch (selectedBlockchain.key) {
                 case SupportedChainKey.Polkadot: {
+                    console.clear()
                     this.polkadotMenuService.print()
                     break
                 }

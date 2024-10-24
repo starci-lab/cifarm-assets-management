@@ -16,8 +16,7 @@ export class PolkadotMenuService {
             ,"4. Manage nfts (Unique Network)"]
 
         if (!hide) {
-            console.log(`
-Welcome to Polkadot. What do you want to do?
+            console.log(`Welcome to Polkadot. What do you want to do?
 ${list.join("\n")}
 `)
         }      
