@@ -2,7 +2,8 @@ import { Module } from "@nestjs/common"
 import { PolkadotModule } from "./polkadot/"
 
 @Module({
-    providers: [PolkadotModule],
+    imports: [PolkadotModule],
+    providers: [],
     exports: [],
 })
 export class BlockchainModule {}

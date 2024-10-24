@@ -1,7 +1,7 @@
 import { SupportedChainKey } from "@/config"
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
-@Entity()
+@Entity("account")
 export class AccountEntity {
   @PrimaryGeneratedColumn("uuid")
       id: number
@@ -21,7 +21,7 @@ export class AccountEntity {
   @Column({ name: "password", type: "varchar", length: 100, nullable: true })
       password?: string
 
-  @Column({ name: "chain", type: "enum", enum: SupportedChainKey })
+  @Column({ name: "chain", type: "varchar", length: 50 })
       chain: SupportedChainKey
 
   @Column({ name: "is_active", type: "boolean", default: true })
