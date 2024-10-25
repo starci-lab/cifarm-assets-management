@@ -1,15 +1,18 @@
 import { Global, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { AccountEntity, ConfigEntity } from "@/database"
+import { AccountEntity, ConfigEntity, TokenEntity } from "@/database"
 import { NetworkService } from "./network.service"
+import { TokenService } from "./token.service"
 @Global()
 @Module({
     providers: [
-        NetworkService
+        NetworkService,
+        TokenService
     ],
     exports: [
-        NetworkService
+        NetworkService,
+        TokenService
     ],
-    imports: [TypeOrmModule.forFeature([AccountEntity, ConfigEntity])],
+    imports: [TypeOrmModule.forFeature([AccountEntity, ConfigEntity, TokenEntity])],
 })
 export class CommonModule {}

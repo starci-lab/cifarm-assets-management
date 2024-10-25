@@ -16,7 +16,7 @@ const config: HardhatUserConfig = {
         moonbeamAlpha: {
             url: "https://rpc.testnet.moonbeam.network",
             chainId: 1287,
-            accounts: ["0xa5ab5f898856fdc63282e647902ef674e0d2159be10bd80390c4a4b71ebea530"]
+            accounts: ["0x09819dab1c590392c5c65c8937711e0ef4a346bfcd76d1232e0226fc6b24ba30"]
         },
     },
     gasReporter: {

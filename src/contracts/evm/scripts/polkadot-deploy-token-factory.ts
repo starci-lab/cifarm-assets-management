@@ -1,7 +1,7 @@
 import { ethers } from "hardhat"
 
 const deploy = async () => {
-    const fixedSupplyToken = await ethers.deployContract("FixedSupplyToken", ["$CAULI Token", "$CAULI", 1000000])
+    const fixedSupplyToken = await ethers.deployContract("FixedSupplyToken", ["$CAULI Token", "$CAULI", "1000000000000000000000000"])
     await fixedSupplyToken.waitForDeployment()
     const fixedSupplyTokenAddress = await fixedSupplyToken.getAddress()
     console.log(`FixedSupplyToken deployed at: ${fixedSupplyTokenAddress}`)

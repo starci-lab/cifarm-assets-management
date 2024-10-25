@@ -1,6 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { ReadlineService } from "../readline.service"
 import {
+    AccessLevelRole,
     PolkadotAccountService,
     PolkadotMoonbeamService,
 } from "../../blockchain"
@@ -43,7 +44,10 @@ export class PolkadotMoonbeamMenuService {
             "1. View address",
             "2. View balance",
             "3. Import token",
-            `4. Switch network (Current: ${network})`,
+            "4. Check token balance",
+            "5. Transfer token",
+            "6. Mint token (MINTER only)",
+            `7. Switch network (Current: ${network})`,
         ]
 
         if (!hide) {
@@ -87,8 +91,6 @@ ${list.join("\n")}
                     this.readlineService.rl.question(
                         "Enter token name: ",
                         async (name) => {
-                            //làm sao để xuống dòng
-                            console.log("\n")
                             this.readlineService.rl.question(
                                 "Enter token address: ",
                                 async (address) => {
@@ -97,6 +99,49 @@ ${list.join("\n")}
                                 },
                             )
                         },
+                    )
+                    break
+                }
+                case 4: {
+                    this.readlineService.rl.question(
+                        "Enter token name: ",
+                        async (name) => {
+                            const balance = await this.moonbeamService.balanceOf(name)
+                            console.log(`Balance of ${name}: ${balance}`)
+                            this.continue()
+                        },
+                    )
+                    break
+                }
+                case 6: {
+                    this.readlineService.rl.question(
+                        "Enter token name: ",
+                        async (name) => {
+                            const hasRole = await this.moonbeamService.hasRole(name, AccessLevelRole.Minter)
+                            if (!hasRole) {
+                                this.logger.debug("You do not have the required role to mint tokens.")
+                                this.logger.debug("Granting the role MINTER to your account.")
+                                await this.moonbeamService.grantRole(name, AccessLevelRole.Minter)
+                                this.logger.debug("Role MINTER granted.")
+                            }
+                            this.readlineService.rl.question(
+                                "Enter amount to mint: ",
+                                async (amount) => {
+                                    const _amount = parseInt(amount)
+                                    if (isNaN(_amount)) {
+                                        this.logger.error("Invalid amount. Please try again.")
+                                        this.print(true)
+                                        return
+                                    }
+                                    this.readlineService.rl.question(
+                                        "Enter recipient address: ",
+                                        async (address) => {
+                                            await this.moonbeamService.mint(name, address, _amount)
+                                            this.continue()
+                                        },
+                                    )
+                                })
+                        }
                     )
                     break
                 }
