@@ -1,12 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common"
-import { ReadlineService } from "./readline.service"
+import { ReadlineService } from "../readline.service"
 import {
     PolkadotAccountService,
     PolkadotRelayChainService,
-    PolkadotUniqueNetworkService,
-} from "../blockchain"
-import { NetworkService } from "../blockchain"
+} from "../../blockchain"
+import { NetworkService } from "../../blockchain"
 import { Network } from "@/config"
+import { uiPrompts } from "../constants.menu"
+import { PolkadotBifrostMenuService } from "./bifrost-menu.service"
 
 @Injectable()
 export class PolkadotMenuService {
@@ -16,13 +17,12 @@ export class PolkadotMenuService {
     private readonly readlineService: ReadlineService,
     private readonly polkadotAccountService: PolkadotAccountService,
     private readonly relayChainService: PolkadotRelayChainService,
-    //private readonly bifrostService: PolkadotBifrostService,
-    private readonly uniqueNetworkService: PolkadotUniqueNetworkService,
+    private readonly bifrostMenuService: PolkadotBifrostMenuService,
     private readonly networkService: NetworkService,
     ) {}
 
     public continue() {
-        this.readlineService.rl.question("Press any key to continue...", async () => {
+        this.readlineService.rl.question(uiPrompts().continue, async () => {
             console.clear()
             this.print()
         })
@@ -50,7 +50,7 @@ export class PolkadotMenuService {
 ${list.join("\n")}
 `)
         }
-        this.readlineService.rl.question("Enter your choice: ", async (answer) => {
+        this.readlineService.rl.question(uiPrompts().enterChoice, async (answer) => {
             const selectedIndex = parseInt(answer)
             if (
                 !isNaN(selectedIndex) &&
@@ -78,6 +78,16 @@ ${list.join("\n")}
                     console.log(`Network: ${network === Network.Testnet ? "Testnet" : "Mainnet"}`)
                     console.log(`Relay Chain Balance: ${relayChainBalance}`)
                     this.continue()
+                    break
+                }
+                case 3: {
+                    console.clear()
+                    this.bifrostMenuService.print()
+                    break
+                }
+                default: {
+                    this.logger.error("This feature is not supported yet.")
+                    this.print(true)
                     break
                 }
                 }

@@ -1,8 +1,9 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { blockchainConfig, SupportedChainKey } from "@/config"
 import { valuesWithKey } from "@/utils"
-import { PolkadotMenuService } from "./polkadot-menu.service"
+import { PolkadotMenuService } from "./polkadot/menu.service"
 import { ReadlineService } from "./readline.service"
+import { uiPrompts } from "./constants.menu"
 
 @Injectable()
 export class MainMenuService {
@@ -15,6 +16,7 @@ export class MainMenuService {
     }
     //print menu as cli
     public print(hide: boolean = false): void {
+        console.clear()
         
         let list = ""
         const blockchainList = valuesWithKey(blockchainConfig())
@@ -27,7 +29,7 @@ export class MainMenuService {
 ${list}`)
         }
         
-        this.readlineService.rl.question("Enter your choice: ", (choice: string) => {
+        this.readlineService.rl.question(uiPrompts().enterChoice, (choice: string) => {
             const selectedIndex = parseInt(choice)
             if (!isNaN(selectedIndex) && selectedIndex > 0 && selectedIndex <= blockchainList.length) {
                 const selectedBlockchain = blockchainList[selectedIndex]
