@@ -6,25 +6,21 @@ import {
     UpdateDateColumn,
 } from "typeorm"
 
-@Entity("config")
-export class ConfigEntity {
+@Entity("token")
+export class TokenEntity {
   @PrimaryGeneratedColumn("uuid")
       id: string
 
-  @Column({ name: "key", type: "varchar", length: 100 })
-      key: ConfigKey
-
   //value is as object
-  @Column({ name: "value", type: "varchar", length: 200 })
-      value: string
+  @Column({ name: "name", type: "varchar", length: 200 })
+      name: string
+
+  @Column({ name: "address", type: "varchar", length: 100 })
+      address: string
 
   @CreateDateColumn({ name: "created_at" })
       createdAt: Date
 
   @UpdateDateColumn({ name: "updated_at" })
       updatedAt: Date
-}
-
-export enum ConfigKey {
-  Network = "network",
 }

@@ -1,5 +1,11 @@
 import { SupportedChainKey } from "@/config"
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from "typeorm"
 
 @Entity("account")
 export class AccountEntity {
@@ -29,4 +35,10 @@ export class AccountEntity {
 
   @Column({ name: "is_active", type: "boolean", default: true })
       isActive: boolean
+
+  @CreateDateColumn({ name: "created_at" })
+      createdAt: Date
+
+  @UpdateDateColumn({ name: "updated_at" })
+      updatedAt: Date
 }

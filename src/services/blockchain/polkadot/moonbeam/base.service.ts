@@ -4,6 +4,8 @@ import { NetworkService } from "../../common"
 import { moonbeamProvider } from "./client.moonbeam"
 import { PolkadotAccountService } from "../account.service"
 import { computeDenomination } from "@/utils"
+import { DataSource } from "typeorm"
+import { TokenEntity } from "@/database"
 
 @Injectable()
 export class PolkadotMoonbeamService {
@@ -13,6 +15,7 @@ export class PolkadotMoonbeamService {
     constructor(
     private readonly networkService: NetworkService,
     private readonly polkadotAccountService: PolkadotAccountService,
+    private readonly dataSource: DataSource
     ) {}
 
     async connect() {
@@ -39,5 +42,13 @@ export class PolkadotMoonbeamService {
         const balance = await this.wallet.provider.getBalance(this.wallet.address)
         // 18 is the default denomination for Ethereum
         return computeDenomination(balance, 18)
+    }
+
+    public async importToken(name: string, address: string) {
+        await this.dataSource.manager.save(TokenEntity, {
+            name,
+            address
+        })
+        this.logger.log(`Token ${name} imported with address ${address}`)
     }
 }

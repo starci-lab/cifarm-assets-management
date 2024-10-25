@@ -13,6 +13,11 @@ const config: HardhatUserConfig = {
                 mnemonic: readFileSync(join(process.cwd(), "mnemonic.key"), "utf-8"),
             },
         },
+        moonbeamAlpha: {
+            url: "https://rpc.testnet.moonbeam.network",
+            chainId: 1287,
+            accounts: ["0xa5ab5f898856fdc63282e647902ef674e0d2159be10bd80390c4a4b71ebea530"]
+        },
     },
     gasReporter: {
         currency: "ETH",

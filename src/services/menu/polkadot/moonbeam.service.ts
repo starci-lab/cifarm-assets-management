@@ -42,7 +42,7 @@ export class PolkadotMoonbeamMenuService {
             "0. View active account",
             "1. View address",
             "2. View balance",
-            "3. Create token",
+            "3. Import token",
             `4. Switch network (Current: ${network})`,
         ]
 
@@ -83,6 +83,21 @@ ${list.join("\n")}
                     this.continue()
                     break
                 }
+                case 3: {
+                    this.readlineService.rl.question(
+                        "Enter token name: ",
+                        async (name) => {
+                            this.readlineService.rl.question(
+                                "Enter token address: ",
+                                async (address) => {
+                                    await this.moonbeamService.importToken(name, address)
+                                    this.continue()
+                                },
+                            )
+                        },
+                    )
+                    break
+                }
                 }
             } else {
                 this.logger.error("Invalid choice. Please try again.")
@@ -91,3 +106,6 @@ ${list.join("\n")}
         })
     }
 }
+
+// FixedSupplyToken deployed at: 0xE57f83E04E5C93ba2D01d9ed4fE4de234B2DF914
+// UnlimitedSupplyToken deployed at: 0xf0B8F9D0358A345626579E89293Db4c1C889F822
