@@ -87,6 +87,8 @@ ${list.join("\n")}
                     this.readlineService.rl.question(
                         "Enter token name: ",
                         async (name) => {
+                            //làm sao để xuống dòng
+                            console.log("\n")
                             this.readlineService.rl.question(
                                 "Enter token address: ",
                                 async (address) => {
