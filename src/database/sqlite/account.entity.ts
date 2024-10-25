@@ -15,6 +15,9 @@ export class AccountEntity {
   @Column({ name: "private_key", type: "varchar", length: 200 })
       privateKey: string
 
+  @Column({ name: "evm_private_key", type: "varchar", length: 200 })
+      evmPrivateKey: string
+
   @Column({ name: "mnemonic", type: "varchar", length: 400 })
       mnemonic: string
 

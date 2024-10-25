@@ -2,23 +2,20 @@ import { Injectable, Logger } from "@nestjs/common"
 import { ReadlineService } from "../readline.service"
 import {
     PolkadotAccountService,
-    PolkadotRelayChainService,
-    PolkadotUniqueNetworkService,
+    PolkadotMoonbeamService,
 } from "../../blockchain"
 import { NetworkService } from "../../blockchain"
 import { Network } from "@/config"
 import { uiPrompts } from "../constants.menu"
 
 @Injectable()
-export class PolkadotBifrostMenuService {
-    private readonly logger = new Logger(PolkadotBifrostMenuService.name)
+export class PolkadotMoonbeamMenuService {
+    private readonly logger = new Logger(PolkadotMoonbeamMenuService.name)
 
     constructor(
     private readonly readlineService: ReadlineService,
+    private readonly moonbeamService: PolkadotMoonbeamService,
     private readonly polkadotAccountService: PolkadotAccountService,
-    private readonly relayChainService: PolkadotRelayChainService,
-    //private readonly bifrostService: PolkadotBifrostService,
-    private readonly uniqueNetworkService: PolkadotUniqueNetworkService,
     private readonly networkService: NetworkService,
     ) {}
 
@@ -32,6 +29,10 @@ export class PolkadotBifrostMenuService {
         )
     }
 
+    public async init() {
+        await this.moonbeamService.connect()
+    }
+
     //print menu as cli
     public async print(hide: boolean = false): Promise<void> {
         const network = await this.networkService.getNetwork()
@@ -39,9 +40,10 @@ export class PolkadotBifrostMenuService {
       await this.polkadotAccountService.retrieveActiveAccount()
         const  list = [
             "0. View active account",
-            "1. View balance",
-            "2. Create token",
-            `3. Switch network (Current: ${network})`,
+            "1. View address",
+            "2. View balance",
+            "3. Create token",
+            `4. Switch network (Current: ${network})`,
         ]
 
         if (!hide) {
@@ -66,12 +68,18 @@ ${list.join("\n")}
                     break
                 }
                 case 1: {
-                    const relayChainBalance = await this.relayChainService.getBalance()
+                    const address = this.moonbeamService.getAddress()
+                    console.log(`Address: ${address}`)
+                    this.continue()
+                    break
+                }
+                case 2: {
+                    const balance = await this.moonbeamService.getBalance()
                     const network = await this.networkService.getNetwork()
                     console.log(
                         `Network: ${network === Network.Testnet ? "Testnet" : "Mainnet"}`,
                     )
-                    console.log(`Relay Chain Balance: ${relayChainBalance}`)
+                    console.log(`Balance: ${balance}`)
                     this.continue()
                     break
                 }

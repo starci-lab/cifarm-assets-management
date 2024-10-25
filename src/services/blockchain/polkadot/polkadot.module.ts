@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { AccountEntity, ConfigEntity } from "@/database"
 import { PolkadotRelayChainService } from "./relay-chain.service"
 import { PolkadotUniqueNetworkService } from "./unique-network"
+import { PolkadotMoonbeamService } from "./moonbeam"
 
 @Global()
 @Module({
@@ -11,11 +12,13 @@ import { PolkadotUniqueNetworkService } from "./unique-network"
         PolkadotAccountService,
         PolkadotRelayChainService,
         PolkadotUniqueNetworkService,
+        PolkadotMoonbeamService,
     ],
     exports: [
         PolkadotAccountService,
         PolkadotRelayChainService,
         PolkadotUniqueNetworkService,
+        PolkadotMoonbeamService,
     ],
     imports: [TypeOrmModule.forFeature([AccountEntity, ConfigEntity])],
 })

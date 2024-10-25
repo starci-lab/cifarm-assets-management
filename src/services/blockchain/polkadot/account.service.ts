@@ -2,16 +2,17 @@ import { Injectable, Logger } from "@nestjs/common"
 import { AccountEntity, ConfigEntity, ConfigKey } from "@/database"
 import { DataSource } from "typeorm"
 import {
+    ed25519PairFromSeed,
     encodeAddress,
     mnemonicGenerate,
     mnemonicToMiniSecret,
-    sr25519PairFromSeed,
 } from "@polkadot/util-crypto"
 import { u8aToHex } from "@polkadot/util"
 import { Network, SupportedChainKey } from "@/config"
 import "@polkadot/api-augment"
 import { ApiPromise, WsProvider } from "@polkadot/api"
 import { computeDenomination } from "@/utils"
+import { HDNodeWallet, Mnemonic } from "ethers"
 
 @Injectable()
 export class PolkadotAccountService {
@@ -22,7 +23,9 @@ export class PolkadotAccountService {
     // Create a new account
         const mnemonic = mnemonicGenerate()
         const seed = mnemonicToMiniSecret(mnemonic)
-        const { publicKey, secretKey } = sr25519PairFromSeed(seed)
+
+        const { publicKey, secretKey } = ed25519PairFromSeed(seed)
+        const { privateKey: evmPrivateKey } = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(mnemonic))
         // Save the account to the database
         // Update the previous active account to inactive
         const queryRunner = this.dataSource.createQueryRunner()
@@ -40,9 +43,10 @@ export class PolkadotAccountService {
                 publicKey: u8aToHex(publicKey),
                 privateKey: u8aToHex(secretKey),
                 mnemonic: mnemonic,
+                evmPrivateKey,
                 chain: SupportedChainKey.Polkadot,
             })
-
+            
             await queryRunner.commitTransaction()
             this.logger.log(
                 `Account created successfully. Address: ${accountAddress}`,

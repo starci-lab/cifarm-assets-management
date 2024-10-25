@@ -8,6 +8,7 @@ import { NetworkService } from "../../blockchain"
 import { Network } from "@/config"
 import { uiPrompts } from "../constants.menu"
 import { PolkadotBifrostMenuService } from "./bifrost-menu.service"
+import { PolkadotMoonbeamMenuService } from "./moonbeam.service"
 
 @Injectable()
 export class PolkadotMenuService {
@@ -18,6 +19,7 @@ export class PolkadotMenuService {
     private readonly polkadotAccountService: PolkadotAccountService,
     private readonly relayChainService: PolkadotRelayChainService,
     private readonly bifrostMenuService: PolkadotBifrostMenuService,
+    private readonly moonbeamMenuService: PolkadotMoonbeamMenuService,
     private readonly networkService: NetworkService,
     ) {}
 
@@ -40,7 +42,7 @@ export class PolkadotMenuService {
                 "0. Create a new account",
                 "1. View active account",
                 "2. View balance (Relay chain)",
-                "3. Manage token (Bifrost)",
+                "3. Manage tokens (Moonbeam)",
                 "4. Manage nfts (Unique Network)",
             ]
         }
@@ -82,7 +84,8 @@ ${list.join("\n")}
                 }
                 case 3: {
                     console.clear()
-                    this.bifrostMenuService.print()
+                    await this.moonbeamMenuService.init()
+                    this.moonbeamMenuService.print()
                     break
                 }
                 default: {
